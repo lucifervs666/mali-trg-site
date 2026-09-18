@@ -53,24 +53,38 @@ export default function AdminPanel() {
 
   const dirty = JSON.stringify(menu) !== original;
 
-    async function save() {
+      async function save() {
     setStatus('Saving…');
     const res = await fetch('/api/menu', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ menu }),
     });
+    let data = null;
+    try {
+      data = await res.json();
+    } catch {
+      // non-JSON error page — data stays null, we still show a status below
+    }
     if (res.ok) {
       setOriginal(JSON.stringify(menu));
-      setStatus('Saved ✓');
-      setTimeout(() => setStatus(''), 2500);
+      if (data && data.savedTo === 'local-fallback') {
+        setStorageMode('local-fallback');
+        setStatus(
+          data.error
+            ? `Saved for now, but permanent storage failed (${data.error}) — ask Claude to reconnect Vercel Blob storage.`
+            : "Saved — but only temporarily, permanent storage isn't connected yet."
+        );
+      } else {
+        setStatus('Saved ✓');
+        setTimeout(() => setStatus(''), 2500);
+      }
     } else if (res.status === 401) {
       setStatus('Session expired — please log in again.');
     } else {
-      setStatus('Failed to save.');
+      setStatus(data && data.message ? `Failed to save: ${data.message}` : 'Failed to save.');
     }
   }
-
   async function logout() {
     await fetch('/api/admin/logout', { method: 'POST' });
     window.location.reload();
