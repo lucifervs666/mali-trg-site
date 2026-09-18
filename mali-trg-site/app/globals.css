@@ -117,9 +117,9 @@ nav.mainnav a:hover{ color:var(--ink); border-color:var(--brass); }
 }
 .hero-content{ position:relative; z-index:1; }
 .kicker--onphoto{ color:#ffffff; }
-.wordmark--onphoto{ color:#ffffff; }
-.tagline--onphoto{ color:#ffffff; }
-.ornament-row--onphoto{ color:#ffffff; }
+.wordmark--onphoto{ color:#fbf7ee; }
+.tagline--onphoto{ color:#f1e9d8; }
+.ornament-row--onphoto{ color:#d99b5b; }
 .leadtext--onphoto{ color:#ffffff; }
 .motto--onphoto{ color:#ffffff; }
 .ghost--onphoto{ background:rgba(244,240,230,0.08); color:#ffffff; border-color:#ffffff; }
