@@ -84,11 +84,19 @@ export async function PUT(request) {
   } catch {
     return NextResponse.json({ error: 'invalid json' }, { status: 400 });
   }
-  const clean = sanitizeMenu(body && body.menu);
+    const clean = sanitizeMenu(body && body.menu);
   if (!clean) {
     return NextResponse.json({ error: 'invalid body' }, { status: 400 });
   }
 
-  await saveMenu(clean);
-  return NextResponse.json({ ok: true, storageMode });
+  let result;
+  try {
+    result = await saveMenu(clean);
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'save-failed', message: err && err.message ? err.message : String(err) },
+      { status: 500 }
+    );
+  }
+  return NextResponse.json({ ok: true, storageMode, ...result });
 }
