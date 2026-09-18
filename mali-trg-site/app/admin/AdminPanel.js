@@ -53,7 +53,7 @@ export default function AdminPanel() {
 
   const dirty = JSON.stringify(menu) !== original;
 
-  async function save() {
+    async function save() {
     setStatus('Saving…');
     const res = await fetch('/api/menu', {
       method: 'PUT',
