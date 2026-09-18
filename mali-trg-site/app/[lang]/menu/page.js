@@ -1,6 +1,5 @@
 import { dict } from '../../../lib/i18n';
-import { applyPrices } from '../../../lib/menu-store';
-import { getOverrides } from '../../../lib/blob-store';
+import { getMenu } from '../../../lib/blob-store';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -16,8 +15,7 @@ function label(n, lang) {
 
 export default async function MenuPage({ params }) {
   const lang = params.lang;
-  const overrides = await getOverrides();
-  const menu = applyPrices(overrides);
+  const menu = await getMenu();
 
   return (
     <>
@@ -42,8 +40,8 @@ export default async function MenuPage({ params }) {
                   <div key={gi}>
                     <div className="group-label">{label(g.label, lang)}</div>
                     <ul className="items">
-                      {g.items.map((it, ii) => (
-                        <li className="item" key={ii}>
+                      {g.items.map((it) => (
+                        <li className="item" key={it.id}>
                           <span className="name">{label(it.name, lang)}</span>
                           {it.size ? <span className="size">{it.size}</span> : null}
                           <span className="dots" />
@@ -55,8 +53,8 @@ export default async function MenuPage({ params }) {
                 ))
               : (
                 <ul className="items">
-                  {cat.items.map((it, ii) => (
-                    <li className="item" key={ii}>
+                  {cat.items.map((it) => (
+                    <li className="item" key={it.id}>
                       <span className="name">{label(it.name, lang)}</span>
                       {it.size ? <span className="size">{it.size}</span> : null}
                       <span className="dots" />
